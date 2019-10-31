@@ -8,12 +8,21 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by sang on 2017/12/17.
+ * 角色信息实现类
+ *
+ * @author Nian Guowei
  */
 @Mapper
 @Repository
 public interface RolesMapper {
     int addRoles(@Param("roles") String[] roles, @Param("uid") Long uid);
 
-    List<Role> getRolesByUid(Long uid);
+    /**
+     * 根据用户名获取角色列表
+     * @param username
+     * @return
+     */
+    List<Role> getRolesByUsername(@Param("username") String username);
+
+    List<Role> getAllRole();
 }

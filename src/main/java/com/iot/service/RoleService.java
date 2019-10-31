@@ -8,11 +8,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.List;
 
 /**
- * Created by sang on 2017/12/17.
+ * 角色管理
+ *
+ * @author Nian Guowei
  */
 
 public interface RoleService {
 
-    public List<Role> getAllRole();
+    /**
+     *
+     * @return
+     */
+    public List<Role> queryList();
+
 
 }

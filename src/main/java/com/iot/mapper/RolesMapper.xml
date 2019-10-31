@@ -9,7 +9,11 @@
             (null,#{role},#{uid})
         </foreach>
     </insert>
-    <select id="getRolesByUid" parameterType="long" resultType="com.iot.domain.Role">
+    <select id="getRolesByUsername" parameterType="long" resultType="com.iot.domain.Role">
         SELECT r.* FROM roles r,roles_user ru WHERE r.`id`=ru.`rid` AND ru.`uid`=#{uid}
+    </select>
+
+    <select id="getAllRole" resultType="com.iot.domain.Role">
+        select * from roles;
     </select>
 </mapper>

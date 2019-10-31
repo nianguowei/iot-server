@@ -11,19 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sang on 2017/12/17.
+ * 用户信息
+ *
+ * @author Nian Guowei
  */
 @Data
-public class User implements UserDetails {
-    private Long id;
+public class User extends BaseEntity implements UserDetails {
     private String username;
     private String password;
     private String nickname;
-    private boolean enabled;
-    private List<Role> roles;
-    private String email;
-    private String userface;
-    private Timestamp regTime;
+    private Integer system;
+    private String mobile;
+    private String avatarOssKey;
+    private Integer status;
+    private Integer isDeleted;
+    private List<Role> roleList;
 
     @Override
     @JsonIgnore
@@ -45,18 +47,14 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        return false;
     }
 
     @Override
     @JsonIgnore
     public List<GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : roles) {
+        for (Role role : roleList) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         }
         return authorities;

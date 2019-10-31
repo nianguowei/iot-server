@@ -1,6 +1,5 @@
 package com.iot.mapper;
 
-import com.iot.domain.Role;
 import com.iot.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -9,29 +8,44 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by sang on 2017/12/17.
+ * 用户管理mapper
+ *
+ * @author Nian Guowei
  */
 @Mapper
 @Repository
 public interface UserMapper {
 
+    /**
+     * 根据用户名获取用户信息
+     * @param username
+     * @return
+     */
     User loadUserByUsername(@Param("username") String username);
 
-    long reg(User user);
+    /**
+     * 插入用户
+     * @param user
+     */
+    void insert(User user);
 
-    int updateUserEmail(@Param("email") String email, @Param("id") Long id);
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    void update(User user);
 
-    List<User> getUserByNickname(@Param("nickname") String nickname);
+    /**
+     * 查询用户列表
+     * @param user
+     * @return
+     */
+    List<User> queryList(User user);
 
-    List<Role> getAllRole();
 
-    int updateUserEnabled(@Param("enabled") Boolean enabled, @Param("uid") Long uid);
+    /**
+     * 删除用户信息
+     */
+    void deleteByUsername(@Param("username") String username);
 
-    int deleteUserById(Long uid);
-
-    int deleteUserRolesByUid(Long id);
-
-    int setUserRoles(@Param("rids") Long[] rids, @Param("id") Long id);
-
-    User getUserById(@Param("id") Long id);
 }

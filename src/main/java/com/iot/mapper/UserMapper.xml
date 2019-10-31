@@ -3,61 +3,131 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iot.mapper.UserMapper">
+
+    <sql id="Column_List">
+        username, password, nickname, system, mobile,avatar_ossKey, status
+    </sql>
+
+    <!-- 查询用户-->
     <select id="loadUserByUsername" resultType="com.iot.domain.User">
-        SELECT * FROM user WHERE username=#{username}
+        SELECT id, <include refid="Column_List"/>
+        FROM iot_user
+        WHERE username=#{username} and is_deleted = 0
     </select>
-    <insert id="reg" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user set username=#{username},password=#{password},nickname=#{nickname}
+
+    <!-- 插入用户-->
+    <insert id="insert" parameterType="com.iot.domain.User">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+        INSERT INTO iot_user
+        (
+        <include refid="Column_List"/>,
+        is_deleted,
+        add_user,
+        add_time
+        )
+        VALUES
+        (
+        #{username},
+        #{password},
+        #{nickname},
+        0,
+        #{mobile},
+        #{avatarOssKey},
+        #{status},
+        0,
+        #{addUser},
+        now()
+        )
     </insert>
-    <update id="updateUserEmail">
-        UPDATE user set email=#{email} WHERE id=#{id}
+
+    <!-- 修改用户-->
+    <update id="update" parameterType="com.iot.domain.User">
+        UPDATE iot_user
+        SET
+            <if test="password != null and password != ''">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="avatarOssKey != null and avatarOssKey != ''">
+                avatar_ossKey = #{avatarOssKey,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                status = #{status},
+            </if>
+            update_user = #{updateUser,jdbcType=VARCHAR},
+            update_time = now()
+        WHERE
+            username = #{username,jdbcType=VARCHAR}
     </update>
-    <select id="getUserByNickname" resultMap="BaseResultMap">
-        SELECT u.*,r.`id` AS rid,r.`name` AS rname FROM user u,roles r,roles_user ru WHERE u.`id`=ru.`uid` AND
-        r.`id`=ru.`rid` AND u.`id` NOT IN(SELECT u.`id` FROM user u,roles_user ru WHERE u.`id`=ru.`uid` AND ru.`rid`=1)
-        <choose>
-            <when test="nickname!=null and nickname!=''">
-                and u.nickname like concat('%',#{nickname},'%') ORDER BY u.`id`
-            </when>
-            <otherwise>
-                ORDER BY u.`id` limit 20
-            </otherwise>
-        </choose>
+
+
+    <select id="queryList" parameterType="com.iot.domain.User" resultType="com.iot.domain.User">
+        SELECT id,  <include refid="Column_List"/>
+        FROM iot_user
+        <where>
+            <if test="username != null and username!= ''">
+                AND username = #{username}
+            </if>
+            <if test="nickname != null and nickname!= ''">
+                AND nickname = #{nickname}
+            </if>
+            <if test="isDeleted != null">
+                AND is_deleted = #{isDeleted}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
     </select>
-    <select id="getUserById" resultMap="BaseResultMap">
-        SELECT u.*,r.`id` AS rid,r.`name` AS rname FROM user u,roles r,roles_user ru WHERE u.`id`=ru.`uid` AND
-        r.`id`=ru.`rid` AND u.`id`=#{id}
-    </select>
-    <resultMap id="BaseResultMap" type="com.iot.domain.User">
-        <id column="id" property="id"/>
-        <result column="username" property="username"/>
-        <result column="nickname" property="nickname"/>
-        <result column="password" property="password"/>
-        <result column="enabled" property="enabled"/>
-        <result column="email" property="email"/>
-        <result column="userface" property="userface"/>
-        <result column="regTime" property="regTime"/>
-        <collection property="roles" ofType="com.iot.domain.Role">
-            <id column="rid" property="id"/>
-            <result column="rname" property="name"/>
-        </collection>
-    </resultMap>
-    <select id="getAllRole" resultType="com.iot.domain.Role">
-        select * from roles;
-    </select>
-    <update id="updateUserEnabled">
-        UPDATE user set enabled=#{enabled} WHERE id=#{uid}
-    </update>
-    <delete id="deleteUserById">
-        DELETE FROM user WHERE id=#{id}
+
+
+    <!-- 删除用户-->
+    <delete id="deleteByUsername">
+        UPDATE ZH_ACCOUNT
+        SET
+            is_deleted = 1,
+            update_user = #{updateUser},
+            update_time = now()
+        WHERE username = #{username}
     </delete>
-    <delete id="deleteUserRolesByUid">
-        DELETE FROM roles_user WHERE uid=#{id}
-    </delete>
-    <insert id="setUserRoles">
-        INSERT INTO roles_user(rid,uid) VALUES
-        <foreach collection="rids" separator="," item="rid">
-            (#{rid},#{id})
-        </foreach>
-    </insert>
+
+    <!--&lt;!&ndash; 添加用户角色关联&ndash;&gt;-->
+    <!--<insert id="insertUserRole" parameterType="com.zhhl.auth.domain.User">-->
+        <!--<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">-->
+            <!--SELECT @@IDENTITY-->
+        <!--</selectKey>-->
+        <!--INSERT INTO ZH_USER_ROLE-->
+        <!--(-->
+        <!--user_id,-->
+        <!--username,-->
+        <!--role_id,-->
+        <!--role_code,-->
+        <!--add_user,-->
+        <!--add_time-->
+        <!--)-->
+        <!--VALUES-->
+        <!--<foreach collection="roles" item="item" index="index" separator="," >-->
+            <!--(-->
+            <!--#{id,jdbcType=INTEGER},-->
+            <!--#{username,jdbcType=VARCHAR},-->
+            <!--#{item.id,jdbcType=INTEGER},-->
+            <!--#{item.roleCode,jdbcType=VARCHAR},-->
+            <!--#{addUser,jdbcType=VARCHAR},-->
+            <!--now()-->
+            <!--)-->
+        <!--</foreach>-->
+    <!--</insert>-->
+
+    <!-- 删除用户角色关联角色-->
+    <!--<delete id="deleteUserRoleByUsername" parameterType="java.lang.String">-->
+        <!--DELETE FROM ZH_USER_ROLE-->
+        <!--WHERE username = #{username,jdbcType=VARCHAR}-->
+    <!--</delete>-->
 </mapper>

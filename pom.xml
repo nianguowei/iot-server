@@ -68,18 +68,35 @@
 			<artifactId>druid</artifactId>
 			<version>1.0.29</version>
 		</dependency>
-		<!--aop -->
+		<!--分页插件 -->
 		<dependency>
-			<groupId>aopalliance</groupId>
-			<artifactId>aopalliance</artifactId>
-			<version>1.0</version>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
 		</dependency>
+		<!--aop -->
+		<!--<dependency>-->
+			<!--<groupId>aopalliance</groupId>-->
+			<!--<artifactId>aopalliance</artifactId>-->
+			<!--<version>1.0</version>-->
+		<!--</dependency>-->
 		<!--get set省略方法 -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.18</version>
 			<scope>provided</scope>
+		</dependency>
+		<!--公共包 -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>21.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
 	</dependencies>
 
