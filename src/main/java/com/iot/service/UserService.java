@@ -33,7 +33,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    PageInfo<User> queryList(User user, Integer pageNum, Integer pageSize);
+    PageInfo<User> queryPage(User user, Integer pageNum, Integer pageSize);
 
     /**
      * 查询用户信息

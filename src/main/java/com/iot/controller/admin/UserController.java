@@ -26,10 +26,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/pager")
-    public PageInfo queryCompanyPager(@RequestBody User user,
+    public PageInfo queryPager(@RequestBody User user,
                                       @RequestParam(value="pageNum", required = false) Integer pageNum,
                                       @RequestParam(value="pageSize", required = false) Integer pageSize){
-        return userService.queryList(user,pageNum,pageSize);
+        return userService.queryPage(user,pageNum,pageSize);
     }
 
 

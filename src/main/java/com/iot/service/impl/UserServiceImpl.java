@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageInfo<User> queryList(User user, Integer pageNum, Integer pageSize) {
+    public PageInfo<User> queryPage(User user, Integer pageNum, Integer pageSize) {
         if(pageNum == null || pageSize == null){
             PageHelper.startPage(1, Integer.MAX_VALUE);
         } else {

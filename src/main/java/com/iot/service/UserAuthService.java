@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,7 +31,8 @@ public class UserAuthService implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
         //查询用户的角色信息，并返回存入user中
-        List<Role> roles = rolesMapper.getRolesByUsername(username);
+//        List<Role> roles = rolesMapper.getRolesByUsername(username);
+        List<Role> roles = new ArrayList<>();
         user.setRoleList(roles);
         return user;
     }
