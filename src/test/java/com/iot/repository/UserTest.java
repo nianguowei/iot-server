@@ -1,8 +1,8 @@
-package com.lot.repository;
+package com.iot.repository;
 
 import com.iot.domain.User;
 import com.iot.mapper.UserMapper;
-import com.lot.TmallApplicationTests;
+import com.iot.TmallApplicationTests;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +34,7 @@ public class UserTest extends TmallApplicationTests {
     public void testQueryList(){
         User user = new User();
         user.setIsDeleted(0);
+        user.setUsername("1");
         List<User> list = userMapper.queryList(user);
         Assert.assertSame(1,list.size());
     }
