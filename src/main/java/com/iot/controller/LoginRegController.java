@@ -1,9 +1,7 @@
 package com.iot.controller;
 
 import com.iot.domain.RespBean;
-import com.iot.domain.User;
-import com.iot.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.iot.utils.BusinessException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,19 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginRegController {
 
-    @Autowired
-    UserService userService;
-
-    @RequestMapping("/login_error")
-    public RespBean loginError() {
-        return new RespBean("error", "登录失败!");
-    }
-
-    @RequestMapping("/login_success")
-    public RespBean loginSuccess() {
-        return new RespBean("success", "登录成功!");
-    }
-
     /**
      * 如果自动跳转到这个页面，说明用户未登录，返回相应的提示即可
      * <p>
@@ -34,7 +19,7 @@ public class LoginRegController {
      * @return
      */
     @RequestMapping("/login_page")
-    public RespBean loginPage() {
-        return new RespBean("error", "尚未登录，请登录!");
+    public RespBean loginPage() throws BusinessException {
+        throw new BusinessException(0, "尚未登录，请登录!");
     }
 }
