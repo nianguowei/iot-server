@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iot.mapper.AttributeMapper">
+
+    <sql id="Column_List">
+        mod_id, code, `name` , `type`, participle, analyzer, def_value, sort
+    </sql>
+
+    <!-- 插入模块-->
+    <insert id="insert" parameterType="com.iot.domain.Attribute">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT @@IDENTITY
+        </selectKey>
+        INSERT INTO iot_attribute
+        (
+        <include refid="Column_List"/>,
+        is_deleted,
+        add_user,
+        add_time
+        )
+        VALUES
+        (
+        #{modId},
+        #{code},
+        #{name},
+        #{type},
+        #{participle},
+        #{analyzer},
+        #{defValue},
+        #{sort},
+        0,
+        #{addUser},
+        now()
+        )
+    </insert>
+
+    <!-- 修改-->
+    <update id="update" parameterType="com.iot.domain.Attribute">
+        UPDATE iot_attribute
+        SET
+            <if test="name != null and name != ''">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="defValue != null defValue icon != ''">
+                def_value = #{defValue,jdbcType=VARCHAR},
+            </if>
+            <if test="sort!=null">
+                sort = #{sort},
+            </if>
+            update_user = #{updateUser,jdbcType=VARCHAR},
+            update_time = now()
+        WHERE
+            id = #{id}
+    </update>
+
+    <!-- 删除-->
+    <delete id="delete">
+        UPDATE iot_attribute
+        SET
+            is_deleted = 1,
+            update_user = #{updateUser},
+            update_time = now()
+        WHERE id = #{id}
+    </delete>
+
+
+    <select id="queryListByModId" resultType="com.iot.domain.Attribute">
+        SELECT id,  <include refid="Column_List"/>
+        FROM iot_attribute
+        <where>
+            AND mod_id = #{modId}
+            AND is_deleted = 0
+        </where>
+    </select>
+
+</mapper>

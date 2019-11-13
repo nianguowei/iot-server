@@ -1,4 +1,4 @@
-package com.iot.controller.admin;
+package com.iot.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.iot.domain.User;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Nian Guowei
  */
 @RestController
-@RequestMapping("/admin/user")
+@RequestMapping("/user")
 @Api(tags = {"用户管理"})
 public class UserController {
 

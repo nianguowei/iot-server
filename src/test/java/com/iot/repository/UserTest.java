@@ -36,7 +36,7 @@ public class UserTest extends TmallApplicationTests {
         user.setIsDeleted(0);
         user.setUsername("1");
         List<User> list = userMapper.queryList(user);
-        Assert.assertSame(1,list.size());
+        Assert.assertEquals(1,list.size());
     }
 
 }

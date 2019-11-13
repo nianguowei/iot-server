@@ -1,6 +1,5 @@
 package com.iot.controller;
 
-import com.iot.domain.RespBean;
 import com.iot.utils.BusinessException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +17,7 @@ public class LoginRegController {
      * @return
      */
     @RequestMapping("/login_page")
-    public RespBean loginPage() throws BusinessException {
+    public void loginPage() throws BusinessException {
         throw new BusinessException(0, "尚未登录，请登录!");
     }
 }
